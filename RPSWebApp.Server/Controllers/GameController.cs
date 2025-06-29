@@ -8,28 +8,39 @@ namespace RPSWebApp.Server.Controllers
     [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
+        private readonly ClassicGamePlay _classicGamePlay;
+
+        public GameController(ClassicGamePlay classicGamePlay)
+        {
+            _classicGamePlay = classicGamePlay;
+        }
+
         [HttpPost("play")]
         public IActionResult Play([FromBody] GamePlayRequest request)
         {
             if (request == null || !Enum.IsDefined(typeof(GameChoices), request.UserChoice))
                 return BadRequest("Invalid request.");
 
-            var computerChoice = logic.GetRandomChoice();
-            var result = logic.GetResult(request.UserChoice, computerChoice);
+            var result = _classicGamePlay.Play(request);
 
-            return Ok(new GamePlayResult
-            {
-                UserChoice = request.UserChoice,
-                ComputerChoice = computerChoice,
-                Result = result
-            });
+            return Ok(result);
         }
 
+        // Only classic choices for now
         [HttpGet("choices")]
-        public IActionResult GetChoices([FromQuery] GameMode mode)
+        public IActionResult GetChoices()
         {
-            var logic = mode == GameMode.Extended ? (IGameLogic)new ExtendedGameLogic() : new ClassicGameLogic();
-            return Ok(logic.GetChoices());
+            var choices = new[] { GameChoices.Rock, GameChoices.Paper, GameChoices.Scissors };
+            return Ok(choices);
         }
+
+        // Only classic choices for now
+        [HttpGet("enchancedchoices")]
+        public IActionResult GetEnhancedChoices()
+        {
+            var choices = new[] { GameChoices.Rock, GameChoices.Paper, GameChoices.Scissors, GameChoices.Lizard, GameChoices.Spock };
+            return Ok(choices);
+        }
+
     }
 }

@@ -17,7 +17,7 @@ namespace RPSWebApp.Server.Core
             return result;
         }
 
-        private GamePlayResult GetResult(GameChoices user, GameChoices computer)
+        public GamePlayResult GetResult(GameChoices user, GameChoices computer)
         {
             GamePlayResult result = new GamePlayResult
             {
