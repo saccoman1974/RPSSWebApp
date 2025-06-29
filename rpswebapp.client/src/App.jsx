@@ -49,11 +49,15 @@ function App() {
                 </label>
                 <label>
                     <input type="radio" value="Enhanced" checked={mode === 'Enhanced'} onChange={() => setMode('Enhanced')} />
-                    Extended
+                    Enhanced
                 </label>
             </div>
             <div className="instruction">
                 <p>Please select one of the choices below and press Play:</p>
+            </div>
+            <br />
+            <div className="instruction">
+                <p>Choose enhanced to play a game mode where you can use the iconic Lizard / Spock moves as made famous by the Big Bang Theory.</p>
             </div>
             <div className="choices">
                 {choices.map(choice => (
