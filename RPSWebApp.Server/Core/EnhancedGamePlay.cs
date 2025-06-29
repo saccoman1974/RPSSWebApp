@@ -1,6 +1,6 @@
 using RPSWebApp.Server.Core;
 
-namespace RPSSWebApp.Server.Core
+namespace RPSWebApp.Server.Core
 {
     public class EnhancedGamePlay : ClassicGamePlay
     {

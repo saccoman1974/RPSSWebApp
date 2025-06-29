@@ -4,18 +4,21 @@ import './App.css';
 function App() {
     const [mode, setMode] = useState('classic');
     const [choices, setChoices] = useState([]);
+    const [selectedChoice, setSelectedChoice] = useState('');
     const [userChoice, setUserChoice] = useState('');
     const [computerChoice, setComputerChoice] = useState('');
     const [result, setResult] = useState('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetch(`/api/game/choices?mode=${mode}`)
+        const endpoint = mode === 'Enhanced' ? '/api/game/enchancedchoices' : '/api/game/choices';
+        fetch(endpoint)
             .then(res => res.json())
             .then(setChoices);
     }, [mode]);
 
-    async function play(choice) {
+    async function play() {
+        if (!selectedChoice) return;
         setLoading(true);
         setUserChoice('');
         setComputerChoice('');
@@ -23,7 +26,7 @@ function App() {
         const response = await fetch('/api/game/play', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userChoice: choice, mode })
+            body: JSON.stringify({ UserChoice: selectedChoice, Mode: mode.charAt(0).toUpperCase() + mode.slice(1) })
         });
         if (response.ok) {
             const data = await response.json();
@@ -36,27 +39,44 @@ function App() {
 
     return (
         <div className="game-container">
-            <h1>Rock Paper Scissors{mode === 'enhanced' && ' Lizard Spock'}</h1>
+            <h1>Rock Paper Scissors Game</h1>
             <div className="mode-select">
                 <label>
-                    <input type="radio" value="classic" checked={mode === 'classic'} onChange={() => setMode('classic')} />
+                    <input type="radio" value="Classic" checked={mode === 'Classic'} onChange={() => setMode('Classic')} />
                     Classic
                 </label>
                 <label>
-                    <input type="radio" value="enhanced" checked={mode === 'enhanced'} onChange={() => setMode('enhanced')} />
+                    <input type="radio" value="Enhanced" checked={mode === 'Enhanced'} onChange={() => setMode('Enhanced')} />
                     Extended
                 </label>
             </div>
+            <div className="instruction">
+                <p>Please select one of the choices below and press Play:</p>
+            </div>
             <div className="choices">
                 {choices.map(choice => (
-                    <button key={choice} onClick={() => play(choice)} disabled={loading}>{choice}</button>
+                    <label key={choice} style={{ marginRight: '1em' }}>
+                        <input
+                            type="radio"
+                            name="user-choice"
+                            value={choice}
+                            checked={selectedChoice === choice}
+                            onChange={() => setSelectedChoice(choice)}
+                            disabled={loading}
+                        />
+                        {choice}
+                    </label>
                 ))}
             </div>
+            <button onClick={play} disabled={loading || !selectedChoice} style={{ marginTop: '1em' }}>Play</button>
             {result && (
-                <div className="result">
-                    <p>You chose: <b>{userChoice}</b></p>
-                    <p>Computer chose: <b>{computerChoice}</b></p>
-                    <h2>Result: {result}</h2>
+                <div className="result" style={{ marginTop: '2em' }}>
+                    <textarea
+                        readOnly
+                        value={`You chose: ${userChoice}\nComputer chose: ${computerChoice}\nResult: ${result}`}
+                        rows={4}
+                        style={{ width: '100%', resize: 'none' }}
+                    />
                 </div>
             )}
         </div>

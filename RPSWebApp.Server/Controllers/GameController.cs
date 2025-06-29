@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RPSWebApp.Server.Models;
 using RPSWebApp.Server.Core;
+using System.Linq;
 
 namespace RPSWebApp.Server.Controllers
 {
@@ -23,7 +24,12 @@ namespace RPSWebApp.Server.Controllers
 
             var result = _classicGamePlay.Play(request);
 
-            return Ok(result);
+            // Return string values for frontend compatibility
+            return Ok(new {
+                userChoice = result.UserChoice.ToString(),
+                computerChoice = result.ComputerChoice.ToString(),
+                result = result.Result.ToString()
+            });
         }
 
         // Only classic choices for now
@@ -31,7 +37,8 @@ namespace RPSWebApp.Server.Controllers
         public IActionResult GetChoices()
         {
             var choices = new[] { GameChoices.Rock, GameChoices.Paper, GameChoices.Scissors };
-            return Ok(choices);
+            // Return string names for frontend
+            return Ok(choices.Select(c => c.ToString()));
         }
 
         // Only classic choices for now
@@ -39,8 +46,7 @@ namespace RPSWebApp.Server.Controllers
         public IActionResult GetEnhancedChoices()
         {
             var choices = new[] { GameChoices.Rock, GameChoices.Paper, GameChoices.Scissors, GameChoices.Lizard, GameChoices.Spock };
-            return Ok(choices);
+            return Ok(choices.Select(c => c.ToString()));
         }
-
     }
 }

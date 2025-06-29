@@ -15,7 +15,7 @@
     {
         None,
         Classic,
-        Extended
+        Enhanced
     }
 
     public enum GameResult
