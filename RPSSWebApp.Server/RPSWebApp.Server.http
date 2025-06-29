@@ -1,0 +1,6 @@
+@RPSWebApp.Server_HostAddress = http://localhost:5214
+
+GET {{RPSWebApp.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
