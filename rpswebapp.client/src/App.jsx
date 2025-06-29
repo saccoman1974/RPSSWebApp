@@ -9,6 +9,7 @@ function App() {
     const [computerChoice, setComputerChoice] = useState('');
     const [result, setResult] = useState('');
     const [loading, setLoading] = useState(false);
+    const [outcomeReason, setOutcomeReason] = useState('');
 
     useEffect(() => {
         const endpoint = mode === 'Enhanced' ? '/api/game/enchancedchoices' : '/api/game/choices';
@@ -33,6 +34,7 @@ function App() {
             setUserChoice(data.userChoice);
             setComputerChoice(data.computerChoice);
             setResult(data.result);
+            setOutcomeReason(data.outcomeReason || '');
         }
         setLoading(false);
     }
@@ -70,13 +72,16 @@ function App() {
             </div>
             <button onClick={play} disabled={loading || !selectedChoice} style={{ marginTop: '1em' }}>Play</button>
             {result && (
-                <div className="result" style={{ marginTop: '2em' }}>
-                    <textarea
-                        readOnly
-                        value={`You chose: ${userChoice}\nComputer chose: ${computerChoice}\nResult: ${result}`}
-                        rows={4}
-                        style={{ width: '100%', resize: 'none' }}
-                    />
+                <div className="result" style={{ marginTop: '2em', textAlign: 'center' }}>
+                    <div style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1em' }}>You {result}</div>
+                    <div style={{ fontSize: '1.2em' }}>
+                        You chose: <b>{userChoice}</b><br />
+                        Computer chose: <b>{computerChoice}</b>
+                        <br />
+                        <br />
+                        <br />
+                        <b>{outcomeReason} </b>
+                    </div>
                 </div>
             )}
         </div>

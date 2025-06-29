@@ -10,10 +10,12 @@ namespace RPSWebApp.Server.Controllers
     public class GameController : ControllerBase
     {
         private readonly ClassicGamePlay _classicGamePlay;
+        private readonly EnhancedGamePlay _enhancedGamePlay;
 
-        public GameController(ClassicGamePlay classicGamePlay)
+        public GameController(ClassicGamePlay classicGamePlay, EnhancedGamePlay enhancedGamePlay)
         {
             _classicGamePlay = classicGamePlay;
+            _enhancedGamePlay = enhancedGamePlay;
         }
 
         [HttpPost("play")]
@@ -22,13 +24,30 @@ namespace RPSWebApp.Server.Controllers
             if (request == null || !Enum.IsDefined(typeof(GameChoices), request.UserChoice))
                 return BadRequest("Invalid request.");
 
-            var result = _classicGamePlay.Play(request);
+            var result = new GamePlayResult
+            {
+                UserChoice = request.UserChoice,
+                ComputerChoice = GameChoices.None,
+                Result = GameResult.Unknown
+            };
+
+            // Check if Classic or Enhanced mode is selected
+            if (request.Mode == GameMode.Enhanced)
+            {
+                result = _enhancedGamePlay.EnhancedPlay(request);
+            }
+            else if (request.Mode == GameMode.Classic)
+            {
+                result = _classicGamePlay.Play(request);
+            }
 
             // Return string values for frontend compatibility
-            return Ok(new {
+            return Ok(new
+            {
                 userChoice = result.UserChoice.ToString(),
                 computerChoice = result.ComputerChoice.ToString(),
-                result = result.Result.ToString()
+                result = result.Result.ToString(),
+                outcomeReason = result.OutcomeReason.ToString()
             });
         }
 
@@ -41,7 +60,7 @@ namespace RPSWebApp.Server.Controllers
             return Ok(choices.Select(c => c.ToString()));
         }
 
-        // Only classic choices for now
+        // Only enhanced choices for now
         [HttpGet("enchancedchoices")]
         public IActionResult GetEnhancedChoices()
         {

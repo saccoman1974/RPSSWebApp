@@ -26,6 +26,33 @@ namespace RPSWebApp.Server.Core
             };
             result.Result = DetermineResult(user, computer);
 
+            // Set outcome reasons for frontend compatibility
+            if (result.Result == GameResult.Win)
+            {
+                if (OutcomeReasons.Reasons.TryGetValue((user, computer), out string? reason))
+                {
+                    result.OutcomeReason = reason;
+                }
+                else
+                {
+                    result.OutcomeReason = "Unknown reason for win.";
+                }
+            }
+            else if (result.Result == GameResult.Lose)
+            {
+                if (OutcomeReasons.Reasons.TryGetValue((computer, user), out string? reason))
+                {
+                    result.OutcomeReason = reason;
+                }
+                else
+                {
+                    result.OutcomeReason = "Unknown reason for loss.";
+                }
+            }
+            else
+            {
+                result.OutcomeReason = "It's a draw!";
+            }
             return result;
         }
 

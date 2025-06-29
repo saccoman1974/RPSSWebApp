@@ -7,5 +7,6 @@ namespace RPSWebApp.Server.Models
         public GameResult Result { get; set; } = GameResult.Unknown;
         public GameChoices UserChoice { get; set; } = GameChoices.None;
         public GameChoices ComputerChoice { get; set; } = GameChoices.None;
+        public string OutcomeReason { get; set; } = string.Empty;
     }
 }
