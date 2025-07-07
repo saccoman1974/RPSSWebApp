@@ -2,7 +2,7 @@
 
 namespace RPSWebApp.Server.Core
 {
-    public abstract class ClassicGamePlay : IGamePlay
+    public class ClassicGamePlay : IGamePlay
     {
         public GamePlayResult Play(GamePlayRequest request)
         {
