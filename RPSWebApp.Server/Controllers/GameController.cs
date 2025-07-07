@@ -34,7 +34,7 @@ namespace RPSWebApp.Server.Controllers
             // Check if Classic or Enhanced mode is selected
             if (request.Mode == GameMode.Enhanced)
             {
-                result = _enhancedGamePlay.EnhancedPlay(request);
+                result = _enhancedGamePlay.Play(request);
             }
             else if (request.Mode == GameMode.Classic)
             {

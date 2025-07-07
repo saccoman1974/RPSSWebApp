@@ -3,9 +3,9 @@ using RPSWebApp.Server.Models;
 
 namespace RPSWebApp.Server.Core
 {
-    public class EnhancedGamePlay : ClassicGamePlay
+    public class EnhancedGamePlay : IGamePlay
     {
-        public GamePlayResult EnhancedPlay(GamePlayRequest request)
+        public GamePlayResult Play(GamePlayRequest request)
         {
             // Generate computer choice randomly
             var random = new Random();
