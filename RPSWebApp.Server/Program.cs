@@ -6,8 +6,8 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
-// Register DefaultClassicGamePlay and EnhancedGamePlay for DI
-builder.Services.AddScoped<RPSWebApp.Server.Core.ClassicGamePlay, RPSWebApp.Server.Core.DefaultClassicGamePlay>();
+// Register EnhancedGamePlay for DI
+// ClassicGamePlay is abstract, so you may need to register a concrete implementation if required
 builder.Services.AddScoped<RPSWebApp.Server.Core.EnhancedGamePlay>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
